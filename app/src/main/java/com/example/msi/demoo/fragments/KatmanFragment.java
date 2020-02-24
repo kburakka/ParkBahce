@@ -614,7 +614,6 @@ public class KatmanFragment extends Fragment {
                 rel2.addView(spinner);
             }
         }else{
-
             if(layerField.getType().equals("int") || layerField.getType().equals("int2") || layerField.getType().equals("int4")){
                 adding = true;
                 TextView textView = setTextViewInLayout(layerField, rel1);
@@ -674,6 +673,9 @@ public class KatmanFragment extends Fragment {
                 Log.e(TAG, "addDynamicViews: BILINMEYEN TYPE" );
                 adding = false;
                 propertyObjectList.add(new PropertyObject(layerField, findTheValueOfKey(layerField), null, null));
+            }
+            if(katmanType.equals(KATMAN_TYPE_ADD) && layerField.getField().equals("alan")){
+                adding = false;
             }
         }
 

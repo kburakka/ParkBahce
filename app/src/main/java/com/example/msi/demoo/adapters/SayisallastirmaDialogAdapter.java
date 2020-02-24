@@ -103,12 +103,18 @@ public class SayisallastirmaDialogAdapter extends RecyclerView.Adapter<Sayisalla
             }
 
         }else{
-            if(tempLayerModel.getLayer().equals("depo")){
-                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.er_depo));
-            }else if(tempLayerModel.getLayer().equals("iletim_hatti")) {
-                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.er_iletim_hatti));
-            } else if(tempLayerModel.getLayer().equals("su_kuyusu")){
-                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.er_kuyu));
+            if(tempLayerModel.getLayer().equals("agac")){
+                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.agac));
+            }else if(tempLayerModel.getLayer().equals("nokta")) {
+                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.nokta));
+            } else if(tempLayerModel.getLayer().equals("park")) {
+                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.park));
+            }else if(tempLayerModel.getLayer().equals("donati")) {
+                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.donati));
+            }else if(tempLayerModel.getLayer().equals("yapi")) {
+                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.yapi));
+            }else{
+                holder.sayisallastirmaIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.polygon));
             }
         }
     }

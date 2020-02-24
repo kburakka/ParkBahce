@@ -260,7 +260,7 @@ public class KategorikAramaDialog extends DialogFragment{
 //                                String ilceUrl = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:tr_ilce" +
 //                                        "&maxFeatures=500&outputFormat=application%2Fjson&propertyname=ad,uavtilce&sortby=ad&cql_filter=uavtil=" + selectedIl.getId();
                                 String ilceUrl = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:tr_ilce" +
-                                        "&maxFeatures=500&outputFormat=application%2Fjson&propertyname=ad,uavtilce&sortby=ad&cql_filter=uavtil=" + 55;
+                                        "&maxFeatures=500&outputFormat=application%2Fjson&propertyname=ad,uavtilce&sortby=ad&cql_filter=uavtil=" + 34;
                                 getIlIlceMahallelerinDatas(ilceUrl, Utils.ILCELER);
                             }
                         }

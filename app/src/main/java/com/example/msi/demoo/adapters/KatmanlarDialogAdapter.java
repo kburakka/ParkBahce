@@ -152,12 +152,18 @@ public class KatmanlarDialogAdapter extends BaseExpandableListAdapter {
 
                     parentImageView.setImageBitmap(tempBitmapLine);                }
             }else{
-                if(katmanlarParent.getLayer().getLayer().equals("depo")){
-                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.er_depo));
-                }else if(katmanlarParent.getLayer().getLayer().equals("iletim_hatti")) {
-                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.er_iletim_hatti));
-                } else if(katmanlarParent.getLayer().getLayer().equals("su_kuyusu")){
-                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.er_kuyu));
+                if(katmanlarParent.getLayer().getLayer().equals("agac")){
+                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.agac));
+                }else if(katmanlarParent.getLayer().getLayer().equals("nokta")) {
+                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.nokta));
+                } else if(katmanlarParent.getLayer().getLayer().equals("park")) {
+                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.park));
+                }else if(katmanlarParent.getLayer().getLayer().equals("donati")) {
+                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.donati));
+                }else if(katmanlarParent.getLayer().getLayer().equals("yapi")) {
+                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.yapi));
+                }else{
+                    parentImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.polygon));
                 }
             }
         }

@@ -59,6 +59,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }else if(searchMatch.getType().equals(Utils.MAHALLELER)){
             holder.searchName.setText(searchMatch.getMahAd());
             holder.searchTableName.setText("Mahalle");
+        }else if(searchMatch.getType().equals("Park")){
+            holder.searchName.setText(searchMatch.getIlceAd());
+            holder.searchTableName.setText("Park");
         }
 
 

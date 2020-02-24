@@ -479,12 +479,15 @@ public class MainActivity extends AppCompatActivity
     private void searchedDataGeting(String ilceMahalleStr, String ilceMahalleType) {
         String searchUrl = "";
         if (ilceMahalleType.equals(Utils.ILCELER)) {
-            searchUrl = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=saski:ilce&maxFeatures=50&outputFormat=application/json" +
-                    "&propertyName=ad,uavtilce&sortBy=ad&cql_filter=" + "ad%20LIKE%20%27%25" + ilceMahalleStr.substring(0, 1).toUpperCase() + ilceMahalleStr.substring(1) + "%25%27%20";
+            searchUrl = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:tr_ilce&maxFeatures=50&outputFormat=application/json" +
+                    "&propertyName=ad,uavtilce,uavtil&sortBy=ad&cql_filter=" + "ad%20LIKE%20%27%25" + ilceMahalleStr.substring(0, 1).toUpperCase() + ilceMahalleStr.substring(1) + "%25%27%20%20and%20uavtil=34";
 
         } else if (ilceMahalleType.equals(Utils.MAHALLELER)) {
-            searchUrl = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=saski:mahalle&maxFeatures=50&outputFormat=application/json" +
-                    "&propertyName=ad,uavtmah,uavtilce&sortBy=ad&cql_filter=" + "ad%20LIKE%20%27%25" + ilceMahalleStr.substring(0, 1).toUpperCase() + ilceMahalleStr.substring(1) + "%25%27%20";
+            searchUrl = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:tr_mahalle&maxFeatures=50&outputFormat=application/json" +
+                    "&propertyName=ad,uavtmah,uavtilce,il&sortBy=ad&cql_filter=" + "ad%20LIKE%20%27%25" + ilceMahalleStr.substring(0, 1).toUpperCase() + ilceMahalleStr.substring(1) + "%25%27%20%20and%20il=34";
+        }else if (ilceMahalleType.equals("park")) {
+            searchUrl = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park:park&maxFeatures=50&outputFormat=application/json" +
+                    "&propertyName=ad&sortBy=ad&cql_filter=" + "ad%20LIKE%20%27%25" + ilceMahalleStr.substring(0, 1).toUpperCase() + ilceMahalleStr.substring(1) + "%25%27%20";
         }
 
         Log.e(TAG, "searchedDataGeting: search URl : " + searchUrl);
@@ -518,6 +521,10 @@ public class MainActivity extends AppCompatActivity
                                         String mahalleAd = properties.getString("ad");
                                         String ilceId = properties.getString("uavtilce");
                                         searchMatchList.add(new SearchMatch(Utils.MAHALLELER, mahalleId, mahalleAd, ilceId));
+                                    } else if(ilceMahalleType.equals("park")){
+                                        String parkAd = properties.getString("ad");
+                                        String parkId = jsonArray.getJSONObject(i).getString("id");
+                                        searchMatchList.add(new SearchMatch("Park",parkId,parkAd));
                                     }
                                 }
                             }
@@ -525,7 +532,11 @@ public class MainActivity extends AppCompatActivity
                             if (ilceMahalleType.equals(Utils.ILCELER))
                                 searchedDataGeting(ilceMahalleStr, Utils.MAHALLELER);
                             else if (ilceMahalleType.equals(Utils.MAHALLELER))
+                                searchedDataGeting(ilceMahalleStr, "park");
+                            else if (ilceMahalleType.equals("park")){
                                 searchResultShow();
+                            }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -590,15 +601,20 @@ public class MainActivity extends AppCompatActivity
 
     private void searchResultClicked(SearchMatch clickedSearchMatch) {
         if (clickedSearchMatch.getType().equals(Utils.ILCELER)) {
-            String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=saski:ilce&maxFeatures=50&outputFormat=application/json" +
+            String url =  "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:tr_ilce&maxFeatures=50&outputFormat=application/json" +
                     "&cql_filter=uavtilce=" + clickedSearchMatch.getIlceId();
             getForSearchedResultLayer(url, Utils.ILCELER);
 
         } else if (clickedSearchMatch.getType().equals(Utils.MAHALLELER)) {
-            String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=saski:mahalle&maxFeatures=50&outputFormat=application/json" +
+            String url = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:tr_mahalle&maxFeatures=50&outputFormat=application/json" +
                     "&cql_filter=uavtmah=" + clickedSearchMatch.getMahId();
             getForSearchedResultLayer(url, Utils.MAHALLELER);
+        } else if (clickedSearchMatch.getType().equals("Park")) {
+            String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park:park&maxFeatures=50&outputFormat=application/json" +
+                    "&featureid=" + clickedSearchMatch.getIlceId();
+            getForSearchedResultLayer(url, "Park");
         }
+
     }
 
     //Bolge,sube,il,ilçe aramada geojson`ları bu fonksiyon ile alırız.

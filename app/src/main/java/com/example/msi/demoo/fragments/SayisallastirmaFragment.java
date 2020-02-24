@@ -304,7 +304,8 @@ public class SayisallastirmaFragment extends Fragment {
             polygon.add(pointList);
             if (MainActivity.map.getStyle().getLayer(sayisallastirmaPolygonLayerId) == null) {
                 MainActivity.addGeoJsonSourceToMapFromGeometry(sayisallastirmaPolygonSourceId, Polygon.fromLngLats(polygon));
-                MainActivity.addGeoJsonLineLayerToMap(sayisallastirmaPolygonLayerId, sayisallastirmaPolygonSourceId, "#F63535");
+//                MainActivity.addGeoJsonLineLayerToMap(sayisallastirmaPolygonLayerId, sayisallastirmaPolygonSourceId, "#F63535");
+                MainActivity.addGeoJsonPolygonLayerToMap(sayisallastirmaPolygonLayerId, sayisallastirmaPolygonSourceId, (float) 0.5,"#643bb2");
             } else {
                 MainActivity.refreshGeojsonSource(sayisallastirmaPolygonSourceId, Polygon.fromLngLats(polygon));
             }

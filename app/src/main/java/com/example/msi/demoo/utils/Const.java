@@ -11,9 +11,9 @@ public class Const {
 
 	public static String host_with_port = "http://78.46.197.92:6080";
 
-	public static String feature_add__url = "http://78.46.197.92:6190/geoserver";
+	public static String feature_add__url = "http://78.46.197.92:6190/geoPark";
 
-	public static String feature_attachment_get_url = "http://78.46.197.92:6190/attachments/";
+	public static String feature_attachment_get_url = "http://78.46.197.92:6190/attachmentsPark/";
 
 	public static String percon_string = "{\n" +
 			"  \"success\": true,\n" +
@@ -591,6 +591,26 @@ public class Const {
 			"          \"is_required\": true,\n" +
 			"          \"permission\": 4,\n" +
 			"          \"codedValues\": [\n" +
+			"            {\n" +
+			"              \"id\": 1,\n" +
+			"              \"desc\": \"ÇAM\"\n" +
+			"            },\n" +
+			"            {\n" +
+			"              \"id\": 2,\n" +
+			"              \"desc\": \"KAVAK\"\n" +
+			"            },\n" +
+			"            {\n" +
+			"              \"id\": 3,\n" +
+			"              \"desc\": \"ÇINAR\"\n" +
+			"            },\n" +
+			"            {\n" +
+			"              \"id\": 4,\n" +
+			"              \"desc\": \"KAVAK\"\n" +
+			"            },\n" +
+			"            {\n" +
+			"              \"id\": 5,\n" +
+			"              \"desc\": \"DİĞER\"\n" +
+			"            }\n" +
 			"          ]\n" +
 			"        },\n" +
 			"        {\n" +

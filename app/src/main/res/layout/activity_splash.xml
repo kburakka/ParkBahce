@@ -15,7 +15,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/saski"
+        android:src="@drawable/ibb"
         android:layout_gravity="center"
         />
 
@@ -26,7 +26,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
-        android:text="SASKİ - ANKAGEO"
+        android:text="İB Park ve Bahçeler Müdürlüğü"
         android:textColor="#0090FF"
         android:textSize="18sp"
         android:textStyle="bold" />
