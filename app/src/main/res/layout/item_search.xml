@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_search_relative"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/item_search_ilce_mah_name"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@id/item_search_type"
+        android:layout_marginEnd="8dp"
+        />
+
+    <TextView
+        android:id="@+id/item_search_type"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:textColor="#EFEFEF"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentEnd="true"
+        />
+</RelativeLayout>

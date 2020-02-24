@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_katmanlar"
+            android:icon="@drawable/katmanlar"
+            android:title="Katmanlar" />
+        <item
+            android:id="@+id/nav_yer_imleri"
+            android:icon="@drawable/yer_imleri_navigation_drawer"
+            android:title="Yer İmleri" />
+        <item
+            android:id="@+id/nav_gps_cihazları"
+            android:icon="@drawable/gps_cihazlari"
+            android:title="GPS Cihazları" />
+        <item
+            android:id="@+id/nav_kategorik_search"
+            android:icon="@drawable/search_filter"
+            android:title="Kategorik Arama" />
+        <item
+            android:id="@+id/nav_basemap"
+            android:icon="@drawable/ic_satellite"
+            android:title="Uydu" />
+    </group>
+
+
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_katman_frag_attribute_rel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/item_katman_frag_relative1"
+        android:layout_width="72dp"
+        android:layout_height="33dp"
+        android:layout_alignParentStart="true"/>
+
+    <RelativeLayout
+        android:id="@+id/item_katman_frag_relative2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="33dp"
+        android:gravity="fill_horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/item_katman_frag_relative1"
+        android:layout_toStartOf="@+id/item_katman_frag_relative3"
+        android:background="@drawable/background_edittext_6"/>
+
+    <RelativeLayout
+        android:id="@+id/item_katman_frag_relative3"
+        android:layout_width="64dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="8dp"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

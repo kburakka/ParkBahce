@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:background="#1A2129"
+    tools:context=".fragments.KatmanFragment">
+
+    <LinearLayout
+        android:id="@+id/katman_frag_linear1"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#2D3844"/>
+        <TextView
+            android:id="@+id/katman_frag_baslik"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#1A2129"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#80C4D1"
+            android:textStyle="bold"
+            android:text="Katmanı Ekle"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/katman_frag_linear1"
+        android:layout_above="@+id/katman_bottom_relative"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/katman_frag_attribute_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:background="#1A2129"
+                android:paddingLeft="16dp"
+                android:paddingBottom="16dp">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/katman_frag_media_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/katman_frag_attribute_linear"
+                android:background="#3A4858"
+                android:visibility="visible">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"/>
+
+                <TextView
+                    android:id="@+id/galeri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="Galeri"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#EFEFEF"/>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/katman_frag_fotocek_linear"
+                        android:layout_width="72dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/katman_frag_fotocek"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:src="@drawable/photo"/>
+                        <TextView
+                            android:layout_width="72dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_gravity="center"
+                            android:text="Fotoğraf Çek"
+                            android:textSize="12sp"
+                            android:textColor="#EFEFEF"/>
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/katman_frag_media_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="96dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="24dp">
+
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/katman_bottom_relative"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_small_layout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/katman_frag_cancel_button"
+                android:layout_width="120dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:textColor="#45666D"
+                android:text="İptal"
+                android:background="@drawable/background_exit_button"/>
+
+            <Button
+                android:id="@+id/katman_frag_close_button"
+                android:layout_width="104dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:textColor="#45666D"
+                android:visibility="gone"
+                android:text="Kapat"
+                android:background="@drawable/background_exit_button"/>
+
+            <Button
+                android:id="@+id/katman_frag_save_button"
+                android:layout_width="120dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:textColor="#45666D"
+                android:text="Kaydet"
+                android:background="@drawable/background_exit_button"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

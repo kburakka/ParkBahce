@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".dialogfragments.KategorikAramaDialog">
+
+    <RelativeLayout
+        android:layout_width="312dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/first_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical"
+            android:background="@drawable/background_dialog_fragment">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/search_filter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="Arama"
+                    android:textSize="18sp"
+                    android:textColor="#FFFF"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
+            <info.hoang8f.android.segmented.SegmentedGroup
+                xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/segmented2"
+                android:layout_width="208dp"
+                android:layout_height="30dp"
+                android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                segmentedgroup:sc_border_width="2dp"
+                segmentedgroup:sc_corner_radius="10dp">
+
+                <RadioButton
+                    android:id="@+id/button21"
+                    android:layout_width="104dp"
+                    android:layout_height="wrap_content"
+                    android:text="Adres"
+                    style="@style/RadioButton" />
+
+                <RadioButton
+                    android:id="@+id/button22"
+                    android:layout_width="104dp"
+                    android:layout_height="wrap_content"
+                    android:text="Ada/Parsel"
+                    style="@style/RadioButton" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+            <RelativeLayout
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/background_edittext_6">
+                <Spinner
+                    android:id="@+id/dialog_kategorik_arama_il_sp"
+                    android:layout_width="232dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:spinnerMode="dialog"
+                    android:paddingStart="16dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/background_edittext_6">
+                <Spinner
+                    android:id="@+id/dialog_kategorik_arama_ilce_sp"
+                    android:layout_width="232dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:spinnerMode="dialog"
+                    android:paddingStart="16dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_edittext_6">
+                <Spinner
+                    android:id="@+id/dialog_kategorik_arama_mahalle_sp"
+                    android:layout_width="232dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:spinnerMode="dialog"
+                    android:paddingStart="16dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/dialog_kategorik_arama_ada"
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_edittext_6"
+                android:imeOptions="actionNext"
+                android:padding="8dp"
+                android:hint="Ada"
+                android:maxLines="1"
+                android:inputType="number"/>
+
+            <EditText
+                android:id="@+id/dialog_kategorik_arama_parsel"
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_edittext_6"
+                android:padding="8dp"
+                android:imeOptions="actionDone"
+                android:hint="Parsel"
+                android:maxLines="1"
+                android:inputType="number"/>
+
+
+
+            <LinearLayout
+                android:layout_width="232dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:foregroundGravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="30dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/dialog_kategorik_arama_temizle"
+                    android:layout_width="112dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textColor="#45666D"
+                    android:text="Temizle"
+                    android:background="@drawable/background_exit_button" />
+
+                <Button
+                    android:id="@+id/dialog_kategorik_arama_git"
+                    android:layout_width="112dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textColor="#45666D"
+                    android:text="Git"
+                    android:background="@drawable/background_exit_button" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/dialog_kategorik_arama_close"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/close_circle" />
+
+        <ProgressBar
+            android:id="@+id/dialog_kategorik_arama_progress_bar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
