@@ -107,6 +107,8 @@
                     />
             </RelativeLayout>
 
+
+
             <RelativeLayout
                 android:layout_width="232dp"
                 android:layout_height="40dp"
@@ -115,6 +117,23 @@
                 android:background="@drawable/background_edittext_6">
                 <Spinner
                     android:id="@+id/dialog_kategorik_arama_mahalle_sp"
+                    android:layout_width="232dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:spinnerMode="dialog"
+                    android:paddingStart="16dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_edittext_6">
+                <Spinner
+                    android:id="@+id/dialog_kategorik_arama_park_sp"
                     android:layout_width="232dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"

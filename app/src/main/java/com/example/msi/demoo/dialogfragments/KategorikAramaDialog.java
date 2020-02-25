@@ -45,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,8 @@ public class KategorikAramaDialog extends DialogFragment{
     private static final String IL = "il";
     private static final String ILCE = "ilce";
     private static final String MAHALLE = "mahalle";
+    private static final String PARK = "park";
+
     private static final String ADA_PARSEL = "ada_parsel";
 
     public static final String ilSource = "il.source";
@@ -68,6 +71,8 @@ public class KategorikAramaDialog extends DialogFragment{
     public static final String ilceLayer = "ilce.layer";
     public static final String mahalleSource = "mahalle.source";
     public static final String mahalleLayer = "mahalle.layer";
+    public static final String parkSource = "park.source";
+    public static final String parkLayer = "park.layer";
     public static final String adaSource = "ada.source";
     public static final String adaLayer = "ada.layer";
 
@@ -80,23 +85,26 @@ public class KategorikAramaDialog extends DialogFragment{
 //    private IlIlceMahalle selectedIl = null;
     private IlIlceMahalle selectedIlce = null;
     private IlIlceMahalle selectedMahalle = null;
+    private IlIlceMahalle selectedPark = null;
 
     private ProgressBar progressBar;
 //    private Spinner ilSp;
-    private Spinner ilceSp, mahalleSp;
+    private Spinner ilceSp, mahalleSp, parkSp;
     private Button temizle, git;
     private ImageView kapat;
 
     private EditText adaTV, parselTV;
-    private ArrayAdapter<String> ilAdapter, ilceAdapter, mahalleAdapter;
+    private ArrayAdapter<String> ilAdapter, ilceAdapter, mahalleAdapter,parkAdapter;
 
 //    private List<IlIlceMahalle> ilList = new ArrayList<>();
     private List<IlIlceMahalle> ilceList = new ArrayList<>();
     private List<IlIlceMahalle> mahalleList = new ArrayList<>();
+    private List<IlIlceMahalle> parkList = new ArrayList<>();
 
 //    private List<String> ilStringList = new ArrayList<>();
     private List<String> ilceStringList = new ArrayList<>();
     private List<String> mahalleStringList = new ArrayList<>();
+    private List<String> parktringList = new ArrayList<>();
 
     public KategorikAramaDialog(Activity activity) {
         this.activity= activity;
@@ -122,6 +130,8 @@ public class KategorikAramaDialog extends DialogFragment{
         progressBar = rootView.findViewById(R.id.dialog_kategorik_arama_progress_bar);
 //        ilSp = rootView.findViewById(R.id.dialog_kategorik_arama_il_sp);
         ilceSp = rootView.findViewById(R.id.dialog_kategorik_arama_ilce_sp);
+        parkSp = rootView.findViewById(R.id.dialog_kategorik_arama_park_sp);
+
         mahalleSp = rootView.findViewById(R.id.dialog_kategorik_arama_mahalle_sp);
         adaTV = rootView.findViewById(R.id.dialog_kategorik_arama_ada);
         parselTV = rootView.findViewById(R.id.dialog_kategorik_arama_parsel);
@@ -134,7 +144,7 @@ public class KategorikAramaDialog extends DialogFragment{
 //        setIllerSpinner();
         setIlcelerSpinner();
         setMahallelerSpinner();
-
+        setParkSpinner();
 
 //        ilSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -209,6 +219,9 @@ public class KategorikAramaDialog extends DialogFragment{
                     for(int i=0; i<mahalleList.size(); i++){
                         if(mahalleList.get(i).getText().equals(mahalleStringList.get(position))){
                             selectedMahalle = mahalleList.get(i);
+                            String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park%3Apark&maxFeatures=5000&outputFormat=application%2Fjson&cql_filter=mahalle=" + selectedMahalle.getId();
+
+                            getIlIlceMahallelerinDatas(url, "parklar");
 
                             Log.e(TAG, "onItemSelected: "+ selectedMahalle.getText());
                         }
@@ -223,6 +236,26 @@ public class KategorikAramaDialog extends DialogFragment{
             }
         });
 
+        parkSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(parkList.size() > position && position > 0){
+                    for(int i=0; i<parkList.size(); i++){
+                        if(parkList.get(i).getText().equals(parktringList.get(position))){
+                            selectedPark = parkList.get(i);
+
+                            Log.e(TAG, "onItemSelected: "+ selectedPark.getText());
+                        }
+                    }
+                }else
+                    selectedPark = null;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         git.setOnClickListener(onClickListener);
         temizle.setOnClickListener(onClickListener);
         kapat.setOnClickListener(onClickListener);
@@ -241,12 +274,15 @@ public class KategorikAramaDialog extends DialogFragment{
 //                        ilList.clear();
                         ilceList.clear();
                         mahalleList.clear();
+                        parkList.clear();
 //                        ilStringList.clear();
 //                        ilStringList.add(0,"İl Seçiniz");
                         ilceStringList.clear();
                         ilceStringList.add(0, "İlçe Seçiniz");
                         mahalleStringList.clear();
                         mahalleStringList.add(0, "Mahalle Seçiniz");
+                        parktringList.clear();
+                        parktringList.add(0, "Park Seçiniz");
 
 
                         if(Utils.internetControl(getContext())){
@@ -290,7 +326,7 @@ public class KategorikAramaDialog extends DialogFragment{
 
                             if(ilceList.size() == 0){
 //                                String ilceUrl = "https://cbsservis.tkgm.gov.tr/megsiswebapi.v3/api//idariYapi/ilceListe/" + selectedIl.getId();
-                                String ilceUrl = "https://cbsservis.tkgm.gov.tr/megsiswebapi.v3/api//idariYapi/ilceListe/" + 77;
+                                String ilceUrl = "https://cbsservis.tkgm.gov.tr/megsiswebapi.v3/api//idariYapi/ilceListe/" + 34;
                                 getIlIlceMahallelerinDatas(ilceUrl, Utils.ILCELER);
                             }
                         }
@@ -327,6 +363,14 @@ public class KategorikAramaDialog extends DialogFragment{
         mahalleSp.setAdapter(mahalleAdapter);
     }
 
+    private void setParkSpinner(){
+        parktringList.add(0, "Park Seçiniz");
+
+        parkAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, parktringList);
+        parkAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        parkSp.setAdapter(parkAdapter);
+    }
+
 
     View.OnClickListener onClickListener= new View.OnClickListener() {
         @Override
@@ -335,6 +379,7 @@ public class KategorikAramaDialog extends DialogFragment{
                 case R.id.dialog_kategorik_arama_git:
 //                    removeIlToMap();
                     removeIlceToMap();
+                    removeParkToMap();
                     removeMahalleToMap();
                     removeAdaParselToMap();
 
@@ -344,9 +389,11 @@ public class KategorikAramaDialog extends DialogFragment{
 
                         if(selectedIlce != null)
                             getIlIlceMahallleAdaGeoJsonForWfs(ILCE);
-
                         if(selectedMahalle != null)
                             getIlIlceMahallleAdaGeoJsonForWfs(MAHALLE);
+                        if(selectedPark != null)
+                            getIlIlceMahallleAdaGeoJsonForWfs(PARK);
+
 
                     }else{
                         if(selectedMahalle != null && !adaTV.getText().toString().trim().equals("") && !parselTV.getText().toString().trim().equals(""))
@@ -368,6 +415,7 @@ public class KategorikAramaDialog extends DialogFragment{
 
 //                    removeIlToMap();
                     removeIlceToMap();
+                    removeParkToMap();
                     removeMahalleToMap();
                     removeAdaParselToMap();
                     isAddedLayers = false;
@@ -399,6 +447,8 @@ public class KategorikAramaDialog extends DialogFragment{
                             setIlceList(response);
                         }else if(type.equals(Utils.MAHALLELER)){
                             setMahalleList(response);
+                        }else  if (type.equals("parklar")){
+                            setParkList(response);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -533,7 +583,36 @@ public class KategorikAramaDialog extends DialogFragment{
             e.printStackTrace();
         }
     }
+    private void setParkList(String stringParklar){
+        try{
+            JSONObject jsonObject = new JSONObject(stringParklar);
 
+            parkList.clear();
+            parkList.add(0, new IlIlceMahalle("-1", "Park Seçiniz", null));
+
+            JSONArray jsonArray = jsonObject.getJSONArray("features");
+            for(int i=0; i<jsonArray.length(); i++){
+
+                JSONObject jsonObjectMahalle = jsonArray.getJSONObject(i);
+                JSONObject properties = jsonObjectMahalle.getJSONObject("properties");
+
+                if(selectedSegmentAdres){
+                    String ad = properties.getString("ad");
+                    String uavtmah = jsonObjectMahalle.getString("id");
+                    parkList.add(new IlIlceMahalle(uavtmah, ad, jsonObjectMahalle.toString()));
+                }
+            }
+
+            parktringList.clear();
+            for(int i=0; i<parkList.size(); i++)
+                parktringList.add(parkList.get(i).getText());
+
+            parkAdapter.notifyDataSetChanged();
+            parkSp.setSelection(0);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
 
     private void getIlIlceMahallleAdaGeoJsonForWfs(String ilIlceMahalleAdaType){
         String url = "";
@@ -548,6 +627,8 @@ public class KategorikAramaDialog extends DialogFragment{
                     "&maxFeatures=500&outputFormat=application%2Fjson&cql_filter=uavtmah=" + selectedMahalle.getId();
         }else if(ilIlceMahalleAdaType.equals(ADA_PARSEL)){
             url = "https://cbsservis.tkgm.gov.tr/megsiswebapi.v3/api/parsel/" + selectedMahalle.getId() + "/" + adaTV.getText().toString().trim() + "/" + parselTV.getText().toString().trim();
+        }else if(ilIlceMahalleAdaType.equals(PARK)){
+            url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park%3Apark&maxFeatures=5000&outputFormat=application%2Fjson&featureid=" + selectedPark.getId();
         }
 
 
@@ -595,6 +676,13 @@ public class KategorikAramaDialog extends DialogFragment{
                                                     addMahalleToMap(feature0.toString());
                                                 }
                                             }, 1200);
+                                        }else if(ilIlceMahalleAdaType.equals(PARK)){
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    addParkToMap(feature0.toString());
+                                                }
+                                            }, 2400);
                                         }
 
                                     }
@@ -660,6 +748,20 @@ public class KategorikAramaDialog extends DialogFragment{
 
             zoomToIlIlceMahalle(mahalleGeoJson);
         }
+    }
+
+    private void addParkToMap(String mahalleGeoJson){
+        if(selectedMahalle != null){
+            isAddedLayers = true;
+            MainActivity.addGeoJsonSourceToMapFromJson(parkSource, mahalleGeoJson);
+            MainActivity.addGeoJsonPolygonLayerToMap(parkLayer, parkSource, (float) 0.3, "#18ffff");
+
+            zoomToIlIlceMahalle(mahalleGeoJson);
+        }
+    }
+    public static void removeParkToMap(){
+        MainActivity.removeLayerFromMap(parkLayer);
+        MainActivity.removeSourceFromMap(parkLayer);
     }
     public static void removeMahalleToMap(){
         MainActivity.removeLayerFromMap(mahalleLayer);

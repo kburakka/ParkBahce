@@ -46,7 +46,7 @@ public class Const {
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 2,\n" +
-			"              \"desc\": \"ELEKTRIK_DIREGI\"\n" +
+			"              \"desc\": \"ELEKTRİK DİREĞİ\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 3,\n" +
@@ -54,11 +54,11 @@ public class Const {
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 4,\n" +
-			"              \"desc\": \"REKLAM_TABELASI\"\n" +
+			"              \"desc\": \"REKLAM TABELASI\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 5,\n" +
-			"              \"desc\": \"ROGAR_KAPAGI\"\n" +
+			"              \"desc\": \"ROGAR KAPAĞI\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 6,\n" +
@@ -70,11 +70,11 @@ public class Const {
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 8,\n" +
-			"              \"desc\": \"OYUN_GRUBU\"\n" +
+			"              \"desc\": \"OYUN GRUBU\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 9,\n" +
-			"              \"desc\": \"COP_KUTUSU\"\n" +
+			"              \"desc\": \"ÇÖP KUTUSU\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 10,\n" +
@@ -82,7 +82,7 @@ public class Const {
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 11,\n" +
-			"              \"desc\": \"PIKNIK_MASASI\"\n" +
+			"              \"desc\": \"PİKNİK MASASI\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 12,\n" +
@@ -90,19 +90,19 @@ public class Const {
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 13,\n" +
-			"              \"desc\": \"FITNESS_ALETI\"\n" +
+			"              \"desc\": \"FİTNESS ALETİ\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 14,\n" +
-			"              \"desc\": \"ELEKTRIKLI_PANO\"\n" +
+			"              \"desc\": \"ELEKTRIKLİ_PANO\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 15,\n" +
-			"              \"desc\": \"SOKAK_LAMBASI\"\n" +
+			"              \"desc\": \"SOKAK LAMBASI\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 16,\n" +
-			"              \"desc\": \"DOGALGAZ_KUTUSU\"\n" +
+			"              \"desc\": \"DOĞALGAZ KUTUSU\"\n" +
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 17,\n" +
@@ -110,7 +110,7 @@ public class Const {
 			"            },\n" +
 			"            {\n" +
 			"              \"id\": 18,\n" +
-			"              \"desc\": \"BAYRAK_DIREGI\"\n" +
+			"              \"desc\": \"BAYRAK DİREĞİ\"\n" +
 			"            }\n" +
 			"          ]\n" +
 			"        },\n" +
@@ -118,7 +118,7 @@ public class Const {
 			"          \"id\": 608,\n" +
 			"          \"layer\": \"nokta\",\n" +
 			"          \"field\": \"ilce\",\n" +
-			"          \"alias\": \"Ilce\",\n" +
+			"          \"alias\": \"İlçe\",\n" +
 			"          \"domain\": false,\n" +
 			"          \"domain_table\": null,\n" +
 			"          \"length\": null,\n" +
@@ -244,7 +244,7 @@ public class Const {
 			"          \"id\": 608,\n" +
 			"          \"layer\": \"park\",\n" +
 			"          \"field\": \"ilce\",\n" +
-			"          \"alias\": \"Ilce\",\n" +
+			"          \"alias\": \"İlçe\",\n" +
 			"          \"domain\": false,\n" +
 			"          \"domain_table\": null,\n" +
 			"          \"length\": null,\n" +
@@ -320,7 +320,7 @@ public class Const {
 			"          \"domain\": false,\n" +
 			"          \"domain_table\": null,\n" +
 			"          \"length\": null,\n" +
-			"          \"type\": \"float\",\n" +
+			"          \"type\": \"varchar\",\n" +
 			"          \"position\": 1,\n" +
 			"          \"style\": null,\n" +
 			"          \"is_required\": true,\n" +
@@ -485,7 +485,7 @@ public class Const {
 			"      ],\n" +
 			"      \"id\": 305,\n" +
 			"      \"layer\": \"yapi\",\n" +
-			"      \"alias\": \"Yapi\",\n" +
+			"      \"alias\": \"Yapı\",\n" +
 			"      \"type\": \"MultiPolygon\",\n" +
 			"      \"workspace\": \"park\",\n" +
 			"      \"permission\": 4,\n" +
@@ -581,7 +581,7 @@ public class Const {
 			"          \"id\": 377,\n" +
 			"          \"layer\": \"agac\",\n" +
 			"          \"field\": \"tur\",\n" +
-			"          \"alias\": \"Tur\",\n" +
+			"          \"alias\": \"Tür\",\n" +
 			"          \"domain\": true,\n" +
 			"          \"domain_table\": \"agac_tur\",\n" +
 			"          \"length\": null,\n" +
@@ -617,7 +617,7 @@ public class Const {
 			"          \"id\": 608,\n" +
 			"          \"layer\": \"agac\",\n" +
 			"          \"field\": \"yas\",\n" +
-			"          \"alias\": \"Yas\",\n" +
+			"          \"alias\": \"Yaş\",\n" +
 			"          \"domain\": false,\n" +
 			"          \"domain_table\": null,\n" +
 			"          \"length\": null,\n" +
@@ -632,7 +632,7 @@ public class Const {
 			"          \"id\": 608,\n" +
 			"          \"layer\": \"agac\",\n" +
 			"          \"field\": \"ilce\",\n" +
-			"          \"alias\": \"Ilce\",\n" +
+			"          \"alias\": \"İlçe\",\n" +
 			"          \"domain\": false,\n" +
 			"          \"domain_table\": null,\n" +
 			"          \"length\": null,\n" +
@@ -691,7 +691,7 @@ public class Const {
 			"      ],\n" +
 			"      \"id\": 305,\n" +
 			"      \"layer\": \"agac\",\n" +
-			"      \"alias\": \"Agac\",\n" +
+			"      \"alias\": \"Agaç\",\n" +
 			"      \"type\": \"MultiPoint\",\n" +
 			"      \"workspace\": \"park\",\n" +
 			"      \"permission\": 4,\n" +
@@ -712,7 +712,7 @@ public class Const {
 			"          \"type\": \"float\",\n" +
 			"          \"position\": 1,\n" +
 			"          \"style\": null,\n" +
-			"          \"is_required\": true,\n" +
+			"          \"is_required\": false,\n" +
 			"          \"permission\": 4,\n" +
 			"          \"codedValues\": null\n" +
 			"        },\n" +
@@ -835,7 +835,7 @@ public class Const {
 			"          \"id\": 608,\n" +
 			"          \"layer\": \"donati\",\n" +
 			"          \"field\": \"ilce\",\n" +
-			"          \"alias\": \"Ilce\",\n" +
+			"          \"alias\": \"İlçe\",\n" +
 			"          \"domain\": false,\n" +
 			"          \"domain_table\": null,\n" +
 			"          \"length\": null,\n" +
@@ -894,7 +894,7 @@ public class Const {
 			"      ],\n" +
 			"      \"id\": 305,\n" +
 			"      \"layer\": \"donati\",\n" +
-			"      \"alias\": \"Donati\",\n" +
+			"      \"alias\": \"Donatı\",\n" +
 			"      \"type\": \"MultiPolygon\",\n" +
 			"      \"workspace\": \"park\",\n" +
 			"      \"permission\": 4,\n" +

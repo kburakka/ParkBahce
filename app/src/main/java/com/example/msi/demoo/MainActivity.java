@@ -425,6 +425,8 @@ public class MainActivity extends AppCompatActivity
                         KategorikAramaDialog.removeIlceToMap();
                         KategorikAramaDialog.removeMahalleToMap();
                         KategorikAramaDialog.removeAdaParselToMap();
+                        KategorikAramaDialog.removeParkToMap();
+
                         KategorikAramaDialog.isAddedLayers = false;
                         isAddedSearchedData = false;
                     }

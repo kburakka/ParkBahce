@@ -73,6 +73,7 @@ import com.example.msi.demoo.models.LayerField;
 import com.example.msi.demoo.models.LayerFieldCodedValue;
 import com.example.msi.demoo.models.LayerModel;
 import com.example.msi.demoo.models.PropertyObject;
+import com.example.msi.demoo.models.SearchMatch;
 import com.example.msi.demoo.utils.Const;
 import com.example.msi.demoo.utils.FileUtil;
 import com.example.msi.demoo.utils.HttpsTrustManager;
@@ -622,6 +623,15 @@ public class KatmanFragment extends Fragment {
                 EditText editText = setEditTextInLayout(layerField, rel2);
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 rel2.addView(editText);
+                if(katmanType.equals(KATMAN_TYPE_ADD)){
+                    if (layerField.getField().equals("ilce")){
+                        findIlce(latLngs.get(0),"ilce",editText);
+                        editText.setText(ilceAd);
+                    }else if (layerField.getField().equals("mahalle")){
+                        findIlce(latLngs.get(0),"mahalle",editText);
+                        editText.setText(mahAd);
+                    }
+                }
             } else if(layerField.getType().equals("float") || layerField.getType().equals("float4") || layerField.getType().equals("float8") || layerField.getType().equals("uzunluk")){
                 adding = true;
                 TextView textView = setTextViewInLayout(layerField, rel1);
@@ -638,6 +648,7 @@ public class KatmanFragment extends Fragment {
                 EditText editText = setEditTextInLayout(layerField, rel2);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 rel2.addView(editText);
+
             } else if(layerField.getType().equals("bool")){
                 adding = true;
                 TextView textView = setTextViewInLayout(layerField, rel1);
@@ -669,17 +680,75 @@ public class KatmanFragment extends Fragment {
                     editText.setText(MainActivity.percon.getUsername());
                 editText.setEnabled(false);
                 rel2.addView(editText);
-            } else {
+            }else {
                 Log.e(TAG, "addDynamicViews: BILINMEYEN TYPE" );
                 adding = false;
                 propertyObjectList.add(new PropertyObject(layerField, findTheValueOfKey(layerField), null, null));
             }
+
             if(katmanType.equals(KATMAN_TYPE_ADD) && layerField.getField().equals("alan")){
                 adding = false;
             }
         }
 
         return relParent;
+    }
+
+    Integer ilceId = null;
+    String ilceAd = null;
+    Integer mahId = null;
+    String mahAd = null;
+
+    private void findIlce(LatLng latLng , String type, EditText editText){
+        String url = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:"+type+"&maxFeatures=1&outputFormat=application%2Fjson&cql_filter=intersects(geom,%20POINT("+latLng.getLongitude()+"%20"+latLng.getLatitude()+"))";
+//        HttpsTrustManager.allowAllSSL();
+        StringRequest getRequest = new StringRequest(Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("features");
+
+                            if (jsonArray.length() > 0) {
+
+                                JSONObject properties = jsonArray.getJSONObject(0).getJSONObject("properties");
+                                if (type == "mahalle"){
+                                    mahId = properties.getInt("uavtmah");
+                                    mahAd = properties.getString("ad");
+                                    editText.setText(mahAd);
+                                }else if(type == "ilce"){
+                                    ilceId = properties.getInt("uavtilce");
+                                    ilceAd = properties.getString("ad");
+                                    editText.setText(ilceAd);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.e(TAG, "onErrorResponse:\n" + error.getMessage());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> param = new HashMap<String, String>();
+                return param;
+            }
+        };
+
+        //Add the realibility on the connection.
+        getRequest .setRetryPolicy(new DefaultRetryPolicy(10000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        getRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(getRequest );
     }
 
     private TextView setTextViewInLayout(LayerField layerField, RelativeLayout rel1) {
@@ -708,6 +777,53 @@ public class KatmanFragment extends Fragment {
         return textView;
     }
 
+    private void getNameFromId(EditText editText, String type, String id){
+       String typeee = type;
+       if (type.equals("mah")){
+           typeee = "mahalle";
+       }
+        String url = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:"+typeee+"&maxFeatures=1&outputFormat=application%2Fjson&cql_filter=uavt"+type+"="+id;
+//        HttpsTrustManager.allowAllSSL();
+        StringRequest getRequest = new StringRequest(Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("features");
+
+                            if (jsonArray.length() > 0) {
+
+                                JSONObject properties = jsonArray.getJSONObject(0).getJSONObject("properties");
+                                editText.setText(properties.getString("ad"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.e(TAG, "onErrorResponse:\n" + error.getMessage());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> param = new HashMap<String, String>();
+                return param;
+            }
+        };
+
+        //Add the realibility on the connection.
+        getRequest .setRetryPolicy(new DefaultRetryPolicy(10000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        getRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(getRequest );
+    }
     private EditText setEditTextInLayout(LayerField layerField, RelativeLayout rel2){
         RelativeLayout.LayoutParams layoutParamRel2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParamRel2.addRule(RelativeLayout.CENTER_VERTICAL, rel2.getId());
@@ -733,7 +849,13 @@ public class KatmanFragment extends Fragment {
             }
         }else{
             if(valueOfKey != null)
-                editText.setText(valueOfKey);
+                if (layerField.getField().equals("ilce")){
+                    getNameFromId(editText,"ilce",valueOfKey);
+                }else if(layerField.getField().equals("mahalle")){
+                    getNameFromId(editText,"mah",valueOfKey);
+                }else {
+                    editText.setText(valueOfKey);
+                }
         }
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -957,7 +1079,17 @@ public class KatmanFragment extends Fragment {
                 if(properties.has(layerField.getField()))
                 {
                     if(!String.valueOf(properties.get(layerField.getField())).equals("null"))
+//                        if(String.valueOf(properties.get(layerField.getField())).equals("ilce")){
+//                            findIlce(latLngs.get(0),"ilce");
+//                            return String.valueOf(properties.get(layerField.getField()));
+//                        }else if(String.valueOf(properties.get(layerField.getField())).equals("ilce")) {
+//                            return String.valueOf(properties.get(layerField.getField()));
+//
+//                        }else{
+//                            return String.valueOf(properties.get(layerField.getField()));
+//                        }
                         return String.valueOf(properties.get(layerField.getField()));
+
                     else
                         return null;
                 }
@@ -1127,7 +1259,13 @@ public class KatmanFragment extends Fragment {
             JSONObject propertiesJsonObject = new JSONObject();
             for (PropertyObject propertyObject : propertyObjectList){
                 if(propertyObject.getValue() != null)
-                    propertiesJsonObject.put(propertyObject.getLayerField().getField(), propertyObject.getValue());
+                    if (propertyObject.getLayerField().getField().equals("ilce")){
+                        propertiesJsonObject.put(propertyObject.getLayerField().getField(), ilceId);
+                    }else if(propertyObject.getLayerField().getField().equals("mahalle")){
+                        propertiesJsonObject.put(propertyObject.getLayerField().getField(), mahId);
+                    }else{
+                        propertiesJsonObject.put(propertyObject.getLayerField().getField(), propertyObject.getValue());
+                    }
                 else
                     propertiesJsonObject.put(propertyObject.getLayerField().getField(), JSONObject.NULL);
 
