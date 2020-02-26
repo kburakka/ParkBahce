@@ -379,10 +379,11 @@ public class GpsCihazlariDialog extends DialogFragment {
 
         public ClientClass(BluetoothDevice device1){
             this.device = device1;
-
+            UUID uuid = device1.getUuids()[0].getUuid();
             try{
-                socket = device.createRfcommSocketToServiceRecord(MY_UUID_INSECURE);
+                socket = device.createInsecureRfcommSocketToServiceRecord(uuid);
             }catch (IOException e){
+
                 e.printStackTrace();
             }
         }
