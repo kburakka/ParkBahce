@@ -57,8 +57,10 @@ import com.example.msi.demoo.dialogfragments.ParselBilgisiDialog;
 import com.example.msi.demoo.dialogfragments.SayisallastirmaDialog;
 import com.example.msi.demoo.dialogfragments.YerImiAddDialog;
 import com.example.msi.demoo.dialogfragments.YerImleriDialog;
+import com.example.msi.demoo.fragments.CalloutFragment;
 import com.example.msi.demoo.fragments.KatmanFragment;
 import com.example.msi.demoo.fragments.MediaFragment;
+import com.example.msi.demoo.fragments.CalloutFragment;
 import com.example.msi.demoo.fragments.OlcumFragment;
 import com.example.msi.demoo.fragments.SayisallastirmaFragment;
 import com.example.msi.demoo.interfaces.CustomItemClickListener;
@@ -278,7 +280,6 @@ public class MainActivity extends AppCompatActivity
 
         mapView.onDestroy();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -868,6 +869,11 @@ public class MainActivity extends AppCompatActivity
                     getAdaParselGeoJsonForMapClick(point);
             } else {
                 handleClickingForCalloutFrag(clickedPointF);
+                CameraPosition position = new CameraPosition.Builder()
+                        .target(new LatLng(point.getLatitude(), point.getLongitude())) // Sets the new camera position
+                        .build(); //
+
+                map.setCameraPosition(position);
             }
         }
 
@@ -896,7 +902,6 @@ public class MainActivity extends AppCompatActivity
                     getClickedFeatureInfossOfLayers(url);
                 }
             }
-
         }
     }
 
@@ -990,6 +995,12 @@ public class MainActivity extends AppCompatActivity
         AppController.getInstance().addToRequestQueue(getRequest);
     }
 
+    public void callCalloutFragment(JSONObject jsonObject){
+            fragment = new CalloutFragment(clickedPointF, jsonObject);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "CalloutFragment").addToBackStack(null).commit();
+
+    }
+
     private void showClickedLayersDialog(JSONArray jsonArray) {
         try {
             if (jsonArray.length() > 1) {
@@ -1003,12 +1014,22 @@ public class MainActivity extends AppCompatActivity
                 builder.setItems(charSequences, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        /// BILGI BOLUMU
+//                        try {
+//                            MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_KNOWLEDGE, (JSONObject) jsonArray.get(which));
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment, "KatmanFragment").addToBackStack("CalloutFragment").commit();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
                         try {
-                            MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_KNOWLEDGE, (JSONObject) jsonArray.get(which));
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment, "KatmanFragment").addToBackStack("CalloutFragment").commit();
+
+                            callCalloutFragment((JSONObject) jsonArray.get(which));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+
                     }
                 });
 
@@ -1025,12 +1046,25 @@ public class MainActivity extends AppCompatActivity
 
             } else if (jsonArray.length() == 1) {
                 if (jsonArray.get(0) != null) {
-                    MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_KNOWLEDGE, (JSONObject) jsonArray.get(0));
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment, "KatmanFragment").addToBackStack("CalloutFragment").commit();
+                    /// BILGI BOLUMU
+//                    MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_KNOWLEDGE, (JSONObject) jsonArray.get(0));
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment, "KatmanFragment").addToBackStack("CalloutFragment").commit();
+                    try {
+                        callCalloutFragment((JSONObject) jsonArray.get(0));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+            }else{
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag("CalloutFragment");
+                if(fragment != null)
+                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
 
         } catch (JSONException e) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag("CalloutFragment");
+            if(fragment != null)
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             e.printStackTrace();
         }
     }
@@ -1508,5 +1542,4 @@ public class MainActivity extends AppCompatActivity
             }
         }, 100);
     }
-
 }

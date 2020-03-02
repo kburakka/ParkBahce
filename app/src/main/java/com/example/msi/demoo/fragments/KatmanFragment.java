@@ -113,6 +113,8 @@ public class KatmanFragment extends Fragment {
     private static final String TAG = "KatmanFragment";
 
     public static final String KATMAN_TYPE_ADD = "Ekle";
+    public static final String KATMAN_TYPE_NOT_ADD = "Not Ekle";
+    public static final String KATMAN_TYPE_UPDATE = "Düzenle";
     public static final String KATMAN_TYPE_KNOWLEDGE = "Bilgi";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,7 +224,7 @@ public class KatmanFragment extends Fragment {
         if(!mediaFragmenttanGelindi){
             if (katmanType.equals(KATMAN_TYPE_ADD)){
                 fillListDataForAdd();
-            }else if(katmanType.equals(KATMAN_TYPE_KNOWLEDGE)){
+            }else if(katmanType.equals(KATMAN_TYPE_UPDATE) || katmanType.equals(KATMAN_TYPE_KNOWLEDGE)){
                 fillListDataForEditKnowledge();
             }
         }else{
@@ -350,6 +352,8 @@ public class KatmanFragment extends Fragment {
 
                     if(katmanType.equals(KATMAN_TYPE_KNOWLEDGE) && layerField.getPermision()<1)
                         continue;
+                    if(katmanType.equals(KATMAN_TYPE_UPDATE) && layerField.getPermision()<3)
+                        continue;
 
                     View v = LayoutInflater.from(getContext()).inflate(R.layout.item_katman_fragment_attribute, null);
                     AttributeViewHolder holder = new AttributeViewHolder(v);
@@ -381,6 +385,10 @@ public class KatmanFragment extends Fragment {
             iptal.setVisibility(View.GONE);
             kaydet.setVisibility(View.GONE);
             kapat.setVisibility(View.VISIBLE);
+        }else if (value.equals(KATMAN_TYPE_UPDATE)){
+            iptal.setVisibility(View.VISIBLE);
+            kaydet.setVisibility(View.VISIBLE);
+            kapat.setVisibility(View.GONE);
         }
     }
     private void setVisibilityOfAttachments(){
@@ -575,6 +583,24 @@ public class KatmanFragment extends Fragment {
                                     postTheDataToGeoserver(Const.feature_add__url, jsonForAddAndEdit);
                                 }
                             }
+                            else if(katmanType.equals(KATMAN_TYPE_UPDATE)){
+                                boolean mediaAdded = false;
+                                for(int i=0; i<mediaListForRecycler.size(); i++){
+                                    if(!mediaListForRecycler.get(i).getExistService()){
+                                        mediaAdded = true;
+                                        break;
+                                    }
+                                }
+
+                                if(mediaAdded) {
+                                    boolean checkPermission = checkPermission(getContext());
+                                    if(checkPermission)
+                                        postTheDataToGeoserverWithAttachment(Const.feature_add__url , jsonForAddAndEdit);
+                                    else
+                                        Utils.showCustomToast(getActivity(),Utils.CUSTOM_TOAST_WARNING, "Gerekli izinleri sağlamalısınız.");
+                                }else
+                                    postTheDataToGeoserver(Const.feature_add__url, jsonForAddAndEdit);
+                            }
                         }
                     }
                     break;
@@ -589,10 +615,10 @@ public class KatmanFragment extends Fragment {
     };
 
     private void setTheActiveFragment(){
-        if(katmanType.equals(KATMAN_TYPE_ADD)){
+        if(katmanType.equals(KATMAN_TYPE_ADD) ){
             MainActivity.fragment = getActivity().getSupportFragmentManager().findFragmentByTag("SayisallastirmaFragment");
             getActivity().getSupportFragmentManager().popBackStack();
-        }else if(katmanType.equals(KATMAN_TYPE_KNOWLEDGE )){
+        }else if(katmanType.equals(KATMAN_TYPE_UPDATE) || katmanType.equals(KATMAN_TYPE_KNOWLEDGE) || katmanType.equals(KATMAN_TYPE_NOT_ADD)){
             MainActivity.fragment = getActivity().getSupportFragmentManager().findFragmentByTag("CalloutFragment");
             getActivity().getSupportFragmentManager().popBackStack();
         }
@@ -625,10 +651,10 @@ public class KatmanFragment extends Fragment {
                 rel2.addView(editText);
                 if(katmanType.equals(KATMAN_TYPE_ADD)){
                     if (layerField.getField().equals("ilce")){
-                        findIlce(latLngs.get(0),"ilce",editText);
+                        findIlceMahalle(latLngs.get(0),"ilce",editText);
                         editText.setText(ilceAd);
                     }else if (layerField.getField().equals("mahalle")){
-                        findIlce(latLngs.get(0),"mahalle",editText);
+                        findIlceMahalle(latLngs.get(0),"mahalle",editText);
                         editText.setText(mahAd);
                     }
                 }
@@ -648,6 +674,13 @@ public class KatmanFragment extends Fragment {
                 EditText editText = setEditTextInLayout(layerField, rel2);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 rel2.addView(editText);
+                if(katmanType.equals(KATMAN_TYPE_ADD)){
+                    if  (layerField.getField().equals("park_id")){
+                    findPark(latLngs.get(0),editText);
+                    editText.setText(parkAd);
+
+                    }
+                }
 
             } else if(layerField.getType().equals("bool")){
                 adding = true;
@@ -698,8 +731,10 @@ public class KatmanFragment extends Fragment {
     String ilceAd = null;
     Integer mahId = null;
     String mahAd = null;
+    String parkId = null;
+    String parkAd = null;
 
-    private void findIlce(LatLng latLng , String type, EditText editText){
+    private void findIlceMahalle(LatLng latLng , String type, EditText editText){
         String url = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:"+type+"&maxFeatures=1&outputFormat=application%2Fjson&cql_filter=intersects(geom,%20POINT("+latLng.getLongitude()+"%20"+latLng.getLatitude()+"))";
 //        HttpsTrustManager.allowAllSSL();
         StringRequest getRequest = new StringRequest(Request.Method.GET,
@@ -724,6 +759,52 @@ public class KatmanFragment extends Fragment {
                                     ilceAd = properties.getString("ad");
                                     editText.setText(ilceAd);
                                 }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.e(TAG, "onErrorResponse:\n" + error.getMessage());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> param = new HashMap<String, String>();
+                return param;
+            }
+        };
+
+        //Add the realibility on the connection.
+        getRequest .setRetryPolicy(new DefaultRetryPolicy(10000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        getRequest.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(getRequest );
+    }
+
+    private void findPark(LatLng latLng, EditText editText){
+        String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park%3Apark&maxFeatures=50&outputFormat=application%2Fjson&cql_filter=intersects(geom,%20POINT("+latLng.getLongitude()+"%20"+latLng.getLatitude()+"))";
+        StringRequest getRequest = new StringRequest(Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray("features");
+
+                            if (jsonArray.length() > 0) {
+
+                                JSONObject properties = jsonArray.getJSONObject(0).getJSONObject("properties");
+                                    parkId = jsonArray.getJSONObject(0).getString("id");
+                                    parkAd = properties.getString("ad");
+                                    editText.setText(parkAd);
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -778,11 +859,17 @@ public class KatmanFragment extends Fragment {
     }
 
     private void getNameFromId(EditText editText, String type, String id){
-       String typeee = type;
-       if (type.equals("mah")){
-           typeee = "mahalle";
+        String url = "";
+       if (type.equals("mah") || type.equals("ilce")){
+           String typeee = type;
+           if (type.equals("mah")){
+               typeee = "mahalle";
+           }
+           url = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:"+typeee+"&maxFeatures=1&outputFormat=application%2Fjson&cql_filter=uavt"+type+"="+id;
+       }else if (type.equals("park")){
+           url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park%3Apark&maxFeatures=50&outputFormat=application%2Fjson&featureid=park."+id;
        }
-        String url = "http://159.69.2.10:8080/geoserver/burakegitim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=burakegitim:"+typeee+"&maxFeatures=1&outputFormat=application%2Fjson&cql_filter=uavt"+type+"="+id;
+
 //        HttpsTrustManager.allowAllSSL();
         StringRequest getRequest = new StringRequest(Request.Method.GET,
                 url,
@@ -798,6 +885,19 @@ public class KatmanFragment extends Fragment {
 
                                 JSONObject properties = jsonArray.getJSONObject(0).getJSONObject("properties");
                                 editText.setText(properties.getString("ad"));
+
+
+                                    if (type == "mah"){
+                                        mahId = properties.getInt("uavtmah");
+                                        mahAd = properties.getString("ad");
+                                    }else if(type == "ilce"){
+                                        ilceId = properties.getInt("uavtilce");
+                                        ilceAd = properties.getString("ad");
+                                    }else if (type == "park"){
+                                        parkAd = properties.getString("ad");
+                                        parkId = jsonArray.getJSONObject(0).getString("id");
+                                    }
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -853,7 +953,9 @@ public class KatmanFragment extends Fragment {
                     getNameFromId(editText,"ilce",valueOfKey);
                 }else if(layerField.getField().equals("mahalle")){
                     getNameFromId(editText,"mah",valueOfKey);
-                }else {
+                }else if (layerField.getField().equals("park_id")){
+                    getNameFromId(editText,"park",valueOfKey);
+                }else{
                     editText.setText(valueOfKey);
                 }
         }
@@ -1010,6 +1112,14 @@ public class KatmanFragment extends Fragment {
         //Listelenecek verilerin görünümünü belirliyoruz.
         dataAdapterForSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapterForSpinner);
+
+        if(katmanType.equals(KATMAN_TYPE_UPDATE)) {
+            for(int i=0; i< layerFieldCodedValueList .size(); i++){
+                if(String.valueOf(layerFieldCodedValueList.get(i).getId()).equals(findTheValueOfKey(layerField))){
+                    spinner.setSelection(i+1);
+                }
+            }
+        }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -1175,13 +1285,57 @@ public class KatmanFragment extends Fragment {
 
         return validValues;
     }
+    private List<LatLng> latLngsForUpdate = new ArrayList<>();
+
+
+    private void fillLatLngsForUpdate(){
+        try {
+            JSONObject geometryJson = jsonObject.getJSONObject("geometry");
+            String type = geometryJson.getString("type");
+            JSONArray coordinates = geometryJson.getJSONArray("coordinates");
+
+            if(type.equals(Utils.MULTIPOINT_TYPE)){
+                List<Double> enBoy = Utils.metersToDegrees(coordinates.getJSONArray(0).getDouble(1), coordinates.getJSONArray(0).getDouble(0));
+
+                if(coordinates.getJSONArray(0).length() == 3)
+                    latLngsForUpdate.add(new LatLng(enBoy.get(0), enBoy.get(1), coordinates.getJSONArray(0).getDouble(2)));
+                else if(coordinates.getJSONArray(0).length() == 2)
+                    latLngsForUpdate.add(new LatLng(enBoy.get(0), enBoy.get(1), -5000));
+
+            }else if(type.equals(Utils.MULTILINESTRING_TYPE)){
+                for(int i=0; i<coordinates.getJSONArray(0).length(); i++){
+                    JSONArray latlngJsonArray = coordinates.getJSONArray(0).getJSONArray(i);
+                    List<Double> enBoy = Utils.metersToDegrees(latlngJsonArray.getDouble(1), latlngJsonArray.getDouble(0));
+
+                    if(latlngJsonArray.length() == 3)
+                        latLngsForUpdate.add(new LatLng(enBoy.get(0), enBoy.get(1), latlngJsonArray.getDouble(2)));
+                    else if(latlngJsonArray.length() == 2)
+                        latLngsForUpdate.add(new LatLng(enBoy.get(0), enBoy.get(1), -5000));
+                }
+            }else if(type.equals(Utils.MULTIPOLYGON_TYPE)){
+                for(int a=0; a<coordinates.getJSONArray(0).length(); a++){
+                    for(int i=0; i<coordinates.getJSONArray(a).length(); i++) {
+                        JSONArray latlngJsonArray = coordinates.getJSONArray(a).getJSONArray(0).getJSONArray(i);
+                        List<Double> enBoy = Utils.metersToDegrees(latlngJsonArray.getDouble(1), latlngJsonArray.getDouble(0));
+
+                        if(latlngJsonArray.length() == 3)
+                            latLngsForUpdate.add(new LatLng(enBoy.get(0), enBoy.get(1), latlngJsonArray.getDouble(2)));
+                        else if(latlngJsonArray.length() == 2)
+                            latLngsForUpdate.add(new LatLng(enBoy.get(0), enBoy.get(1), -5000));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     //Geoserver`a post edeceğimiz GEOJSON`ı oluşturmak için kullanıyoruz.
     private JSONObject writeJsonForAdd(){
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObjectSample = new JSONObject();
 
         try {
-            jsonObject.put("type", "Feature");
+            jsonObjectSample.put("type", "Feature");
 
             if(katmanType.equals(KATMAN_TYPE_ADD)){
                 JSONObject geometryJsonObject = new JSONObject();
@@ -1252,7 +1406,97 @@ public class KatmanFragment extends Fragment {
 
                     geometryJsonObject.put("coordinates", coordinatesJsonArrayy);
                 }
-                jsonObject.put("geometry", geometryJsonObject);
+                jsonObjectSample.put("geometry", geometryJsonObject);
+            }else if(katmanType.equals(KATMAN_TYPE_UPDATE)){
+//                if(latLngsForUpdate.size() == 0)
+//                    fillLatLngsForUpdate();
+//
+////                jsonObjectSample.put("geometry", this.jsonObjectSample.getJSONObject("geometry"));
+//                JSONObject geometryJsonObject = new JSONObject();
+//                if(geometryType.equals(Utils.MULTIPOINT_TYPE)){
+//                    geometryJsonObject.put("type", Utils.MULTIPOINT_TYPE);
+//
+//                    JSONArray coordinatesJsonArray = new JSONArray();
+//
+//                    JSONArray coordinateJsonArray0 = new JSONArray();
+//                    List<Double> xy = Utils.degreesToMeters(latLngsForUpdate.get(0).getLatitude(), latLngsForUpdate.get(0).getLongitude());
+//                    Double x = xy.get(0);
+//                    Double y = xy.get(1);
+//                    coordinateJsonArray0.put(y);
+//                    coordinateJsonArray0.put(x);
+//
+//                    if(latLngsForUpdate.get(0).getAltitude() == 0)
+//                        coordinateJsonArray0.put(-5000);
+//                    else
+//                        coordinateJsonArray0.put(latLngsForUpdate.get(0).getAltitude());
+//
+//
+//                    coordinatesJsonArray.put(coordinateJsonArray0);
+//                    geometryJsonObject.put("coordinates", coordinatesJsonArray);
+//
+//                }else if(geometryType.equals(Utils.MULTILINESTRING_TYPE)){
+//                    geometryJsonObject.put("type", Utils.MULTILINESTRING_TYPE);
+//
+//                    JSONArray coordinatesJsonArray = new JSONArray();
+//
+//                    JSONArray coordinateJsonArray0 = new JSONArray();
+//                    for(int i = 0; i<latLngsForUpdate.size(); i++){
+//                        JSONArray coordinateJsonArray0i = new JSONArray();
+//                        List<Double> xy = Utils.degreesToMeters(latLngsForUpdate.get(i).getLatitude(), latLngsForUpdate.get(i).getLongitude());
+//                        Double x = xy.get(0);
+//                        Double y = xy.get(1);
+//                        coordinateJsonArray0i.put(y);
+//                        coordinateJsonArray0i.put(x);
+//
+//                        if(latLngsForUpdate.get(i).getAltitude() == 0)
+//                            coordinateJsonArray0i.put(-5000);
+//                        else
+//                            coordinateJsonArray0i.put(latLngsForUpdate.get(i).getAltitude());
+//
+//
+//                        coordinateJsonArray0.put(i, coordinateJsonArray0i);
+//                    }
+//                    coordinatesJsonArray.put(coordinateJsonArray0);
+//                    geometryJsonObject.put("coordinates", coordinatesJsonArray);
+//                }else if (geometryType.equals(Utils.MULTIPOLYGON_TYPE)){
+//                    geometryJsonObject.put("type", Utils.MULTIPOLYGON_TYPE);
+//
+//                    JSONArray coordinatesJsonArrayy = new JSONArray();
+//
+//                    JSONArray coordinatesJsonArray = new JSONArray();
+//
+//                    JSONArray coordinateJsonArray0 = new JSONArray();
+//                    for(int i = 0; i<latLngsForUpdate.size(); i++){
+//                        JSONArray coordinateJsonArray0i = new JSONArray();
+//                        List<Double> xy = Utils.degreesToMeters(latLngsForUpdate.get(i).getLatitude(), latLngsForUpdate.get(i).getLongitude());
+//                        Double x = xy.get(0);
+//                        Double y = xy.get(1);
+//                        coordinateJsonArray0i.put(y);
+//                        coordinateJsonArray0i.put(x);
+//
+//                        if (i == latLngsForUpdate.size()-1){
+//                            List<Double> xy2 = Utils.degreesToMeters(latLngsForUpdate.get(0).getLatitude(), latLngsForUpdate.get(0).getLongitude());
+//                            Double x2 = xy2.get(0);
+//                            Double y2 = xy2.get(1);
+//                            coordinateJsonArray0i.put(y2);
+//                            coordinateJsonArray0i.put(x2);
+//                        }
+//
+//                        coordinateJsonArray0.put(i, coordinateJsonArray0i);
+//                    }
+//
+//                    coordinatesJsonArray.put(coordinateJsonArray0);
+//
+//                    coordinatesJsonArrayy.put(coordinatesJsonArray);
+//
+//                    geometryJsonObject.put("coordinates", coordinatesJsonArrayy);
+//                }
+//                jsonObjectSample.put("geometry", geometryJsonObject);
+
+                JSONObject geometryJson = jsonObject.getJSONObject("geometry");
+                jsonObjectSample.put("geometry", geometryJson);
+
+
             }
 
 
@@ -1263,6 +1507,13 @@ public class KatmanFragment extends Fragment {
                         propertiesJsonObject.put(propertyObject.getLayerField().getField(), ilceId);
                     }else if(propertyObject.getLayerField().getField().equals("mahalle")){
                         propertiesJsonObject.put(propertyObject.getLayerField().getField(), mahId);
+                    }else if(propertyObject.getLayerField().getField().equals("park_id")){
+                        if (parkId != null){
+                                String[] arrOfStr = parkId.split("\\.");
+                                if (arrOfStr.length > 1){
+                                    propertiesJsonObject.put(propertyObject.getLayerField().getField(), arrOfStr[1]);
+                                }
+                        }
                     }else{
                         propertiesJsonObject.put(propertyObject.getLayerField().getField(), propertyObject.getValue());
                     }
@@ -1270,22 +1521,27 @@ public class KatmanFragment extends Fragment {
                     propertiesJsonObject.put(propertyObject.getLayerField().getField(), JSONObject.NULL);
 
             }
-            jsonObject.put("properties", propertiesJsonObject );
+            jsonObjectSample.put("properties", propertiesJsonObject );
 
+            if(!katmanType.equals(KATMAN_TYPE_ADD) && !katmanType.equals(KATMAN_TYPE_NOT_ADD))
+                jsonObjectSample.put("id", featureId);
 
             if(katmanType.equals(KATMAN_TYPE_ADD)){
-                jsonObject.put("operation", "Insert");
-                jsonObject.put("typeName", layerModel.getLayer());
+                jsonObjectSample.put("operation", "Insert");
+                jsonObjectSample.put("typeName", layerModel.getLayer());
+            }else if(katmanType.equals(KATMAN_TYPE_UPDATE)){
+                jsonObjectSample.put("operation", "Update");
+                jsonObjectSample.put("typeName", feature);
             }
 
-            jsonObject.put("workspace", "park");
+            jsonObjectSample.put("workspace", "park");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
-        return jsonObject;
+        return jsonObjectSample;
     }
 
     private void postTheDataToGeoserver(String url, String xmlData){

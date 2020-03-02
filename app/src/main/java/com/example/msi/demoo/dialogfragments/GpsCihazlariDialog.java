@@ -24,7 +24,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-
 import com.example.msi.demoo.MainActivity;
 import com.example.msi.demoo.R;
 import com.example.msi.demoo.adapters.GpsCihazlariDialogAdapter;
@@ -32,7 +31,6 @@ import com.example.msi.demoo.interfaces.CustomItemClickListener;
 import com.example.msi.demoo.models.BtDevice;
 import com.example.msi.demoo.models.GpsData;
 import com.example.msi.demoo.utils.Utils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -43,7 +41,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.regex.Pattern;
-
 import static android.content.ContentValues.TAG;
 import static com.example.msi.demoo.MainActivity.mainActivityCurrentObject;
 
@@ -211,7 +208,6 @@ public class GpsCihazlariDialog extends DialogFragment {
 
             recyclerViewEslenen.setVisibility(View.GONE);
         } else {
-
             openCloseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

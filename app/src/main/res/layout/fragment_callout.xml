@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/callout_parent_relative"
+    android:clickable="false"
+    android:focusable="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CalloutFragment">
+
+    <RelativeLayout
+        android:id="@+id/callout_child_relative"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:id="@+id/callout_linear"
+            android:layout_width="198dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:background="@drawable/background_callout_8"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/callout_yetki_yok"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="Yetkiniz Yok!"
+                android:textSize="16sp"
+                android:textColor="#80C4D1"
+                android:visibility="gone"/>
+
+
+            <Button
+                android:id="@+id/callout_bilgi"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_exit_button"
+                android:textColor="#45666D"
+                android:text="Bilgi"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/callout_düzenle"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_exit_button"
+                android:textColor="#45666D"
+                android:text="Düzenle"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/callout_geometri_düzenle"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_exit_button"
+                android:textColor="#45666D"
+                android:text="Geometri Düzenle"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/callout_sil"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_exit_button"
+                android:text="Sil"
+                android:textColor="#45666D"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/callout_not_ekle"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_exit_button"
+                android:text="Not Ekle"
+                android:textColor="#45666D"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/callout_km_git"
+                android:layout_width="182dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_exit_button"
+                android:text="KM`ye git"
+                android:textColor="#45666D"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/callout_linear"
+            android:background="@drawable/callout_alti"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>
+
+

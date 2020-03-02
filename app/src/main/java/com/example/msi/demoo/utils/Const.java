@@ -174,6 +174,21 @@ public class Const {
 			"          \"permission\": 4,\n" +
 			"          \"codedValues\": null\n" +
 			"        }\n" +
+				",{\n" +
+		"          \"id\": 608,\n" +
+				"          \"layer\": \"nokta\",\n" +
+				"          \"field\": \"park_id\",\n" +
+				"          \"alias\": \"Park\",\n" +
+				"          \"domain\": false,\n" +
+				"          \"domain_table\": null,\n" +
+				"          \"length\": null,\n" +
+				"          \"type\": \"varchar\",\n" +
+				"          \"position\": 6,\n" +
+				"          \"style\": null,\n" +
+				"          \"is_required\": false,\n" +
+				"          \"permission\": 4,\n" +
+				"          \"codedValues\": null\n" +
+				"        }\n" +
 			"      ],\n" +
 			"      \"id\": 305,\n" +
 			"      \"layer\": \"nokta\",\n" +
@@ -269,8 +284,7 @@ public class Const {
 			"          \"is_required\": false,\n" +
 			"          \"permission\": 4,\n" +
 			"          \"codedValues\": null\n" +
-			"        },\n" +
-			"        {\n" +
+			"        },{\n" +
 			"          \"id\": 68,\n" +
 			"          \"layer\": \"park\",\n" +
 			"          \"field\": \"touch_by\",\n" +
@@ -424,34 +438,34 @@ public class Const {
 			"        },\n" +
 			"        {\n" +
 			"          \"id\": 608,\n" +
-				"          \"layer\": \"yapi\",\n" +
-				"          \"field\": \"ilce\",\n" +
-				"          \"alias\": \"Ilce\",\n" +
-				"          \"domain\": false,\n" +
-				"          \"domain_table\": null,\n" +
-				"          \"length\": null,\n" +
-				"          \"type\": \"int4\",\n" +
-				"          \"position\": 4,\n" +
-				"          \"style\": null,\n" +
-				"          \"is_required\": false,\n" +
-				"          \"permission\": 4,\n" +
-				"          \"codedValues\": null\n" +
-				"        },\n" +
-				"        {\n" +
-				"          \"id\": 608,\n" +
-				"          \"layer\": \"yapi\",\n" +
-				"          \"field\": \"mahalle\",\n" +
-				"          \"alias\": \"Mahalle\",\n" +
-				"          \"domain\": false,\n" +
-				"          \"domain_table\": null,\n" +
-				"          \"length\": null,\n" +
-				"          \"type\": \"int4\",\n" +
-				"          \"position\": 5,\n" +
-				"          \"style\": null,\n" +
-				"          \"is_required\": false,\n" +
-				"          \"permission\": 4,\n" +
-				"          \"codedValues\": null\n" +
-				"        },\n" +
+			"          \"layer\": \"yapi\",\n" +
+			"          \"field\": \"ilce\",\n" +
+			"          \"alias\": \"Ilce\",\n" +
+			"          \"domain\": false,\n" +
+			"          \"domain_table\": null,\n" +
+			"          \"length\": null,\n" +
+			"          \"type\": \"int4\",\n" +
+			"          \"position\": 4,\n" +
+			"          \"style\": null,\n" +
+			"          \"is_required\": false,\n" +
+			"          \"permission\": 4,\n" +
+			"          \"codedValues\": null\n" +
+			"        },\n" +
+			"        {\n" +
+			"          \"id\": 608,\n" +
+			"          \"layer\": \"yapi\",\n" +
+			"          \"field\": \"mahalle\",\n" +
+			"          \"alias\": \"Mahalle\",\n" +
+			"          \"domain\": false,\n" +
+			"          \"domain_table\": null,\n" +
+			"          \"length\": null,\n" +
+			"          \"type\": \"int4\",\n" +
+			"          \"position\": 5,\n" +
+			"          \"style\": null,\n" +
+			"          \"is_required\": false,\n" +
+			"          \"permission\": 4,\n" +
+			"          \"codedValues\": null\n" +
+			"        },\n" +
 			"        {\n" +
 			"          \"id\": 68,\n" +
 			"          \"layer\": \"yapi\",\n" +
@@ -477,6 +491,20 @@ public class Const {
 			"          \"length\": null,\n" +
 			"          \"type\": \"touch_date\",\n" +
 			"          \"position\": 7,\n" +
+			"          \"style\": null,\n" +
+			"          \"is_required\": false,\n" +
+			"          \"permission\": 4,\n" +
+			"          \"codedValues\": null\n" +
+			"        },{\n" +
+			"          \"id\": 608,\n" +
+			"          \"layer\": \"yapi\",\n" +
+			"          \"field\": \"park_id\",\n" +
+			"          \"alias\": \"Park\",\n" +
+			"          \"domain\": false,\n" +
+			"          \"domain_table\": null,\n" +
+			"          \"length\": null,\n" +
+			"          \"type\": \"varchar\",\n" +
+			"          \"position\": 8,\n" +
 			"          \"style\": null,\n" +
 			"          \"is_required\": false,\n" +
 			"          \"permission\": 4,\n" +
@@ -687,6 +715,20 @@ public class Const {
 			"          \"is_required\": false,\n" +
 			"          \"permission\": 4,\n" +
 			"          \"codedValues\": null\n" +
+			"        },{\n" +
+			"          \"id\": 608,\n" +
+			"          \"layer\": \"agac\",\n" +
+			"          \"field\": \"park_id\",\n" +
+			"          \"alias\": \"Park\",\n" +
+			"          \"domain\": false,\n" +
+			"          \"domain_table\": null,\n" +
+			"          \"length\": null,\n" +
+			"          \"type\": \"varchar\",\n" +
+			"          \"position\": 9,\n" +
+			"          \"style\": null,\n" +
+			"          \"is_required\": false,\n" +
+			"          \"permission\": 4,\n" +
+			"          \"codedValues\": null\n" +
 			"        }\n" +
 			"      ],\n" +
 			"      \"id\": 305,\n" +
@@ -697,8 +739,7 @@ public class Const {
 			"      \"permission\": 4,\n" +
 			"      \"is_required\": false,\n" +
 			"      \"style\": null\n" +
-			"    },"+
-			"\t\n" +
+			"    },\t\n" +
 			"    {\n" +
 			"      \"fields\": [\n" +
 			"        {\n" +
@@ -890,6 +931,20 @@ public class Const {
 			"          \"is_required\": false,\n" +
 			"          \"permission\": 4,\n" +
 			"          \"codedValues\": null\n" +
+			"        },{\n" +
+			"          \"id\": 608,\n" +
+			"          \"layer\": \"donati\",\n" +
+			"          \"field\": \"park_id\",\n" +
+			"          \"alias\": \"Park\",\n" +
+			"          \"domain\": false,\n" +
+			"          \"domain_table\": null,\n" +
+			"          \"length\": null,\n" +
+			"          \"type\": \"varchar\",\n" +
+			"          \"position\": 7,\n" +
+			"          \"style\": null,\n" +
+			"          \"is_required\": false,\n" +
+			"          \"permission\": 4,\n" +
+			"          \"codedValues\": null\n" +
 			"        }\n" +
 			"      ],\n" +
 			"      \"id\": 305,\n" +
@@ -900,8 +955,7 @@ public class Const {
 			"      \"permission\": 4,\n" +
 			"      \"is_required\": false,\n" +
 			"      \"style\": null\n" +
-			"    }"+
+			"    } \n" +
 			"  ]\n" +
-			"\n" +
 			"}";
 }

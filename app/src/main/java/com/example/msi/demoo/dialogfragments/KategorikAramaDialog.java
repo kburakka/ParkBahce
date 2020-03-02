@@ -36,6 +36,8 @@ import com.example.msi.demoo.models.IlIlceMahalle;
 import com.example.msi.demoo.utils.Utils;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.MultiLineString;
+import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -797,8 +799,12 @@ public class KategorikAramaDialog extends DialogFragment{
             double[] bbox;
             if(type.equals("Polygon")){
                 bbox = TurfMeasurement.bbox(Polygon.fromJson(jsonObjectGeometry.toString()));
-            }else {
+            }else if (type.equals("MultiPolygon")){
                 bbox = TurfMeasurement.bbox(MultiPolygon.fromJson(jsonObjectGeometry.toString()));
+            }else if (type.equals("MultiPoint")){
+                bbox = TurfMeasurement.bbox(MultiPoint.fromJson(jsonObjectGeometry.toString()));
+            }else{
+                bbox = TurfMeasurement.bbox(MultiLineString.fromJson(jsonObjectGeometry.toString()));
             }
 
             MainActivity.moveCameraToBoundingBox(new LatLng(bbox[1], bbox[0]), new LatLng(bbox[3], bbox[2]), 64, 900);
