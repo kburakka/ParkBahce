@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -58,9 +59,7 @@ import com.example.msi.demoo.dialogfragments.SayisallastirmaDialog;
 import com.example.msi.demoo.dialogfragments.YerImiAddDialog;
 import com.example.msi.demoo.dialogfragments.YerImleriDialog;
 import com.example.msi.demoo.fragments.CalloutFragment;
-import com.example.msi.demoo.fragments.KatmanFragment;
 import com.example.msi.demoo.fragments.MediaFragment;
-import com.example.msi.demoo.fragments.CalloutFragment;
 import com.example.msi.demoo.fragments.OlcumFragment;
 import com.example.msi.demoo.fragments.SayisallastirmaFragment;
 import com.example.msi.demoo.interfaces.CustomItemClickListener;
@@ -299,83 +298,133 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public JSONObject convertCrs(JSONObject jsonObject){
+        JSONObject jsonObjectRtrn = jsonObject;
+        try{
+            JSONObject geometry = jsonObjectRtrn.getJSONObject("geometry");
+            JSONArray coordinates = geometry.getJSONArray("coordinates");
+            String type = geometry.getString("type");
+
+            if(type.equals(Utils.MULTIPOINT_TYPE)){
+                Double lng = coordinates.getJSONArray(0).getDouble(0);
+                Double lat = coordinates.getJSONArray(0).getDouble(1);
+
+                List<Double> point = Utils.metersToDegrees(lat,lng);
+
+
+                jsonObjectRtrn.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0).put(0,point.get(1));
+                jsonObjectRtrn.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(0).put(1,point.get(0));
+            }else if (type.equals(Utils.MULTILINESTRING_TYPE)){
+                for (int i = 0; i < coordinates.length(); i++){
+                    for (int a = 0; a < coordinates.getJSONArray(i).length(); a++){
+                        Double lng = coordinates.getJSONArray(i).getJSONArray(a).getDouble(0);
+                        Double lat = coordinates.getJSONArray(i).getJSONArray(a).getDouble(1);
+
+                        List<Double> point = Utils.metersToDegrees(lat,lng);
+
+                        jsonObjectRtrn.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(i).getJSONArray(a).put(0,point.get(1));
+                        jsonObjectRtrn.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(i).getJSONArray(a).put(1,point.get(0));
+                    }
+                }
+            }else if (type.equals(Utils.MULTIPOLYGON_TYPE)){
+                    for (int i = 0; i < coordinates.length(); i++) {
+                        for (int a = 0; a < coordinates.getJSONArray(i).length(); a++) {
+                            for (int e = 0; e < coordinates.getJSONArray(i).getJSONArray(a).length(); e++){
+
+                                Double lng = coordinates.getJSONArray(i).getJSONArray(a).getJSONArray(e).getDouble(0);
+                                Double lat = coordinates.getJSONArray(i).getJSONArray(a).getJSONArray(e).getDouble(1);
+
+                                List<Double> point = Utils.metersToDegrees(lat, lng);
+
+                                 jsonObjectRtrn.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(i).getJSONArray(a).getJSONArray(e).put(0, point.get(1));
+                                 jsonObjectRtrn.getJSONObject("geometry").getJSONArray("coordinates").getJSONArray(i).getJSONArray(a).getJSONArray(e).put(1, point.get(0));
+                        }
+                    }
+                }
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObjectRtrn;
+    }
+
     public void getFeatureWithId(String id){
         if (id.contains(".")){
 
             ///4326
             String type = id.split("\\.")[0];
-            String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park:"+type+"&maxFeatures=50&outputFormat=application/json" +
-                    "&featureid=" + id;
-
-            ACProgressFlower progressFlower = Utils.progressDialogLikeIosWithoutText(MainActivity.this);
-            if (progressFlower != null)
-                progressFlower.show();
-
-//        HttpsTrustManager.allowAllSSL();
-            StringRequest getRequest = new StringRequest(Request.Method.GET,
-                    url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.e(TAG, "onResponse: getClickedFeatureInfossOfLayers : " + response);
-
-                            if (progressFlower != null && progressFlower.isShowing())
-                                progressFlower.dismiss();
-
-                            try {
-                                JSONObject obj = new JSONObject(response);
-                                if (obj.has("features")) {
-                                JSONArray jsonArray = obj.getJSONArray("features");
-                                JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                JSONObject geometry = jsonObject.getJSONObject("geometry");
-                                String type = geometry.getString("type");
-
-                                if(type.equals(Utils.MULTIPOINT_TYPE)){
-
-                                }else if(type.equals(Utils.MULTILINESTRING_TYPE)){
-
-                                }else if(type.equals(Utils.MULTIPOLYGON_TYPE)){
-                                    MainActivity.addGeoJsonSourceToMapFromJson("clicked", String.valueOf(jsonArray.get(0)));
-                                    MainActivity.addGeoJsonPolygonLayerToMap("clicked", "clicked", (float) 0.3, "#18ffff");
-                                }
-
-                                CameraPosition position = new CameraPosition.Builder()
-                                .target(new LatLng(mapclickLoc.getLatitude(), mapclickLoc.getLongitude())).build();
-
-                                 map.setCameraPosition(position);
-
-                                }
-                                else if (obj.has("success") && !obj.getBoolean("success")){
-                                    Utils.showCustomToast(MainActivity.this, Utils.CUSTOM_TOAST_WARNING, obj.getString("message"));
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if (progressFlower != null && progressFlower.isShowing())
-                        progressFlower.dismiss();
-
-                    error.printStackTrace();
-                    Log.e(TAG, "onErrorResponse:\n" + error.getMessage());
-                }
-            }) {
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> param = new HashMap<String, String>();
-                    return param;
-                }
-            };
-
-            //Add the realibility on the connection.
-            getRequest.setRetryPolicy(new DefaultRetryPolicy(7000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            getRequest.setShouldCache(false);
-            AppController.getInstance().addToRequestQueue(getRequest);
+//            String url = "http://78.46.197.92:6080/geoserver/park/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=park:"+type+"&maxFeatures=50&outputFormat=application/json" +
+//                    "&featureid=" + id;
+//
+//            ACProgressFlower progressFlower = Utils.progressDialogLikeIosWithoutText(MainActivity.this);
+//            if (progressFlower != null)
+//                progressFlower.show();
+//
+////        HttpsTrustManager.allowAllSSL();
+//            StringRequest getRequest = new StringRequest(Request.Method.GET,
+//                    url,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            Log.e(TAG, "onResponse: getClickedFeatureInfossOfLayers : " + response);
+//
+//                            if (progressFlower != null && progressFlower.isShowing())
+//                                progressFlower.dismiss();
+//
+//                            try {
+//                                JSONObject obj = new JSONObject(response);
+//                                if (obj.has("features")) {
+//                                JSONArray jsonArray = obj.getJSONArray("features");
+//                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+//                                JSONObject geometry = jsonObject.getJSONObject("geometry");
+//                                String type = geometry.getString("type");
+//
+//                                MainActivity.addGeoJsonSourceToMapFromJson("clicked", String.valueOf(jsonArray.get(0)));
+//                                if(type.equals(Utils.MULTIPOINT_TYPE)){
+////                                    addGeoJsonPointLayerToMap("clicked","clicked","click_marker", BitmapFactory.decodeResource(getResources(), R.drawable.ic_location_marker));
+//                                }else if(type.equals(Utils.MULTILINESTRING_TYPE)){
+//
+//                                }else if(type.equals(Utils.MULTIPOLYGON_TYPE)){
+//                                    MainActivity.addGeoJsonPolygonLayerToMap("clicked", "clicked", (float) 0.3, "#18ffff");
+//                                }
+//
+//                                CameraPosition position = new CameraPosition.Builder()
+//                                .target(new LatLng(mapclickLoc.getLatitude(), mapclickLoc.getLongitude())).build();
+//
+//                                 map.setCameraPosition(position);
+//
+//                                }
+//                                else if (obj.has("success") && !obj.getBoolean("success")){
+//                                    Utils.showCustomToast(MainActivity.this, Utils.CUSTOM_TOAST_WARNING, obj.getString("message"));
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    }, new Response.ErrorListener() {
+//
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    if (progressFlower != null && progressFlower.isShowing())
+//                        progressFlower.dismiss();
+//
+//                    error.printStackTrace();
+//                    Log.e(TAG, "onErrorResponse:\n" + error.getMessage());
+//                }
+//            }) {
+//
+//                @Override
+//                public Map<String, String> getHeaders() throws AuthFailureError {
+//                    Map<String, String> param = new HashMap<String, String>();
+//                    return param;
+//                }
+//            };
+//
+//            //Add the realibility on the connection.
+//            getRequest.setRetryPolicy(new DefaultRetryPolicy(7000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//            getRequest.setShouldCache(false);
+//            AppController.getInstance().addToRequestQueue(getRequest);
 
 
             ///3857
@@ -404,6 +453,26 @@ public class MainActivity extends AppCompatActivity
                                     JSONArray jsonArray = obj.getJSONArray("features");
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                                     callCalloutFragment(jsonObject);
+
+                                    JSONObject jsonObject1 = convertCrs(jsonObject);
+                                    MainActivity.addGeoJsonSourceToMapFromJson("clicked", String.valueOf(jsonObject1));
+
+                                    JSONObject geometry = jsonObject.getJSONObject("geometry");
+                                    String type = geometry.getString("type");
+
+                                    if(type.equals(Utils.MULTIPOINT_TYPE)){
+                                        addGeoJsonPointLayerToMap("clicked","clicked","click_marker", BitmapFactory.decodeResource(getResources(), R.drawable.ic_location_marker));
+                                    }else if(type.equals(Utils.MULTILINESTRING_TYPE)){
+
+                                    }else if(type.equals(Utils.MULTIPOLYGON_TYPE)){
+                                        MainActivity.addGeoJsonPolygonLayerToMap("clicked", "clicked", (float) 0.3, "#18ffff");
+                                    }
+
+                                    CameraPosition position = new CameraPosition.Builder()
+                                            .target(new LatLng(mapclickLoc.getLatitude(), mapclickLoc.getLongitude())).build();
+
+                                    map.setCameraPosition(position);
+
                                 }
                                 else if (obj.has("success") && !obj.getBoolean("success")){
                                     Utils.showCustomToast(MainActivity.this, Utils.CUSTOM_TOAST_WARNING, obj.getString("message"));
@@ -433,8 +502,8 @@ public class MainActivity extends AppCompatActivity
             };
 
             //Add the realibility on the connection.
-            getRequest.setRetryPolicy(new DefaultRetryPolicy(7000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            getRequest.setShouldCache(false);
+            getRequest2.setRetryPolicy(new DefaultRetryPolicy(7000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            getRequest2.setShouldCache(false);
             AppController.getInstance().addToRequestQueue(getRequest2);
         }
 
@@ -569,7 +638,8 @@ public class MainActivity extends AppCompatActivity
                         KategorikAramaDialog.removeAdaParselToMap();
                         KategorikAramaDialog.removeParkToMap();
                         KategorikAramaDialog.removeClickToMap();
-
+                        KategorikAramaDialog.removeOlcumToMap();
+                        KategorikAramaDialog.removeSayisallastirmaToMap();
                         KategorikAramaDialog.isAddedLayers = false;
                         isAddedSearchedData = false;
                     }

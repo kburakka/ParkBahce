@@ -777,6 +777,23 @@ public class KategorikAramaDialog extends DialogFragment{
         MainActivity.removeLayerFromMap("clicked.symbol");
         MainActivity.removeSourceFromMap("clicked.symbol");
     }
+    public static void removeOlcumToMap(){
+        MainActivity.removeLayerFromMap("olcum.symbol.layer");
+        MainActivity.removeSourceFromMap("olcum.symbol.source");
+        MainActivity.removeLayerFromMap("olcum.line.layer");
+        MainActivity.removeSourceFromMap("olcum.line.source");
+        MainActivity.removeLayerFromMap("olcum.polygon.layer");
+        MainActivity.removeSourceFromMap("olcum.polygon.source");
+    }
+
+    public static void removeSayisallastirmaToMap(){
+        MainActivity.removeLayerFromMap("sayisallastirma.symbol.layer");
+        MainActivity.removeSourceFromMap("sayisallastirma.symbol.source");
+        MainActivity.removeLayerFromMap("sayisallastirma.line.layer");
+        MainActivity.removeSourceFromMap("sayisallastirma.line.source");
+        MainActivity.removeLayerFromMap("sayisallastirma.polygon.layer");
+        MainActivity.removeSourceFromMap("sayisallastirma.polygon.source");
+    }
 
 
     private void addAdaParselToMap(String adaGeoJson){
