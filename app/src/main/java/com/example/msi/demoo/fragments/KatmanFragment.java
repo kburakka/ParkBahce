@@ -1210,6 +1210,12 @@ public class KatmanFragment extends Fragment {
         return null;
     }
 
+    private void removeCallout(){
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("CalloutFragment");
+        if(fragment != null)
+            getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
     private boolean setTheFinalAttributeKeyValue(){
         boolean validValues = true;
         for(int i=0; i<propertyObjectList.size(); i++){
@@ -1567,6 +1573,7 @@ public class KatmanFragment extends Fragment {
                                     if(jsonObject.getBoolean("success")) {
                                         Utils.showCustomToast(getActivity(), Utils.CUSTOM_TOAST_SUCCESS, "Veri " + Utils.ADD + " başarılı.");
                                         //Map`e ekli layerları güncelliyoruz
+
                                         MainActivity.refreshAddedLayers();
                                     }else
                                         Utils.showCustomToast(getActivity(),Utils.CUSTOM_TOAST_ERROR, "Veri "+Utils.ADD+" başarısız.");
@@ -1580,6 +1587,7 @@ public class KatmanFragment extends Fragment {
 
 
                         MainActivity.fragment = null;
+                        removeCallout();
                         getActivity().getSupportFragmentManager().popBackStack();
                         getActivity().getSupportFragmentManager().popBackStack();
 //                        setTheActiveFragment();
@@ -1760,6 +1768,7 @@ public class KatmanFragment extends Fragment {
 
 
                 MainActivity.fragment = null;
+                removeCallout();
                 getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().popBackStack();
 

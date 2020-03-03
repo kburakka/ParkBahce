@@ -769,6 +769,14 @@ public class KategorikAramaDialog extends DialogFragment{
         MainActivity.removeLayerFromMap(mahalleLayer);
         MainActivity.removeSourceFromMap(mahalleSource);
     }
+    public static void removeClickToMap(){
+        MainActivity.removeLayerFromMap("clicked");
+        MainActivity.removeSourceFromMap("clicked");
+        MainActivity.removeLayerFromMap("clicked.line");
+        MainActivity.removeSourceFromMap("clicked.line");
+        MainActivity.removeLayerFromMap("clicked.symbol");
+        MainActivity.removeSourceFromMap("clicked.symbol");
+    }
 
 
     private void addAdaParselToMap(String adaGeoJson){

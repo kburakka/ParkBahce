@@ -118,14 +118,17 @@ public class CalloutFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.callout_düzenle:
-                        MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_UPDATE, jsonObject);
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment,"KatmanFragment").addToBackStack("CalloutFragment").commit();
+                    removeCallout();
+                    MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_UPDATE, jsonObject);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment,"KatmanFragment").addToBackStack("CalloutFragment").commit();
                     break;
                 case R.id.callout_bilgi:
+                    removeCallout();
                     MainActivity.fragment = new KatmanFragment(KatmanFragment.KATMAN_TYPE_KNOWLEDGE, (JSONObject) jsonObject);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, MainActivity.fragment, "KatmanFragment").addToBackStack("CalloutFragment").commit();
                     break;
                 case R.id.callout_geometri_düzenle:
+                    removeCallout();
 //                    removeSymbolOrLineLayer();
 //
 //                    if(Const.login_mode.equals(Utils.LOGIN_MODE_ONLINE)){
@@ -167,7 +170,11 @@ public class CalloutFragment extends Fragment {
             }
         }
     };
-
+    private void removeCallout(){
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("CalloutFragment");
+        if(fragment != null)
+            getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
     private void alertDialogForDelete(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setIcon(R.drawable.toast_warning);
@@ -178,12 +185,14 @@ public class CalloutFragment extends Fragment {
         builder.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                removeCallout();
                 String jsonForDelete = writeJsonForDelete().toString();
                 postTheDataToGeoserver(Const.feature_add__url, jsonForDelete );
             }
         });
         builder.show();
     }
+
     private void postTheDataToGeoserver(String url, String xmlData){
         ACProgressFlower acProgressFlower = Utils.progressDialogLikeIosWithoutText(getContext());
         if(acProgressFlower != null)
